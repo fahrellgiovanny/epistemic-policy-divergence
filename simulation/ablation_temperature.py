@@ -1,5 +1,5 @@
-"""Temperature ablation — GPT→Gemini→GLM, Protocols A+B+C, 2 cases, T=0.3/0.7.
-6 workers per model. 3 models × 6 sessions × 10 calls = 180 total. ~$0.50."""
+"""Temperature ablation — GPT→Gemini→GLM, Protocols A+B+C+D+E, 2 cases, T=0.3/0.7.
+6 workers per model. 3 models × 10 sessions × 10 calls = 300 total. ~$1.00."""
 import csv, os, sys, time, threading
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -11,7 +11,7 @@ from protocols import build_prompt, build_initial_prompt, make_system_prompt
 
 OUTPUT = SCRIPT_DIR / "output" / "ablation_temperature.csv"
 CASES_SELECTED = ["math_short", "geo_short"]
-PROTOS = ["A", "B", "C"]
+PROTOS = ["A", "B", "C", "D", "E"]
 TEMPS = [0.3, 0.7]
 RUNS = 3
 WORKERS = 6
