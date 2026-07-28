@@ -1,0 +1,31 @@
+# Simulation output (large CSVs)
+simulation/output/
+simulation/nohup_output.log
+
+# Validator results
+validator/results/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment files
+.env
+*.env
+
+# macOS
+.DS_Store
+
+# Paper drafts (not part of the benchmark)
+*.md
+!README.md
+!SIMULATION.md
+!HUMAN_REVIEW_GUIDE.md
+!gold_standard_review_notes.md
+!simulation/run_*.md
+!simulation/smoketest*.md
+!simulation/SIMULATION.md
+!validator/README.md
+!validator/HUMAN_REVIEW_GUIDE.md
+!validator/gold_standard_review_notes.md
+!validator/reference/paper_summary.md
