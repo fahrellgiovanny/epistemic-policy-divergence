@@ -1,5 +1,4 @@
-"""Temperature ablation — GPT→Gemini→GLM, Protocols A+B+C+D+E, 2 cases, T=0.3/0.7.
-6 workers per model. 3 models × 10 sessions × 10 calls = 300 total. ~$1.00."""
+"""Temperature ablation — GPT→Gemini→GLM, Protocols A-E, 2 cases, T=0.3/0.7."""
 import csv, os, sys, time, threading
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
