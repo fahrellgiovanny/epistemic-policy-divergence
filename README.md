@@ -29,11 +29,9 @@ Recovery analysis further distinguishes two collapse profiles with direct operat
 
 ```
 simulation/          # Runner scripts and domain definitions
+  run.py             # Unified simulation runner (--model gpt|gemini|glm)
   domains.py         # 10 domain cases (math, physics, history, chemistry, geography)
   protocols.py       # Injection logic for 5 contamination protocols
-  run_gpt.py         # GPT simulation runner
-  run_gemini.py      # Gemini simulation runner
-  run_glm.py         # GLM simulation runner
   mitigation_gemini.py  # Verified history defense experiment
   ablation_temperature.py  # Temperature ablation study
   plans/             # Complete contamination texts
@@ -77,9 +75,12 @@ python3 smoketest.py
 
 ```bash
 cd simulation
-python3 run_gpt.py      # GPT-5.4 Mini
-python3 run_gemini.py   # Gemini-3.1 Flash-Lite
-python3 run_glm.py      # GLM-4.5-Air
+python3 run.py --model gpt      # GPT-5.4 Mini
+python3 run.py --model gemini   # Gemini-3.1 Flash-Lite
+python3 run.py --model glm      # GLM-4.5-Air
+
+# Or for a single test case:
+python3 run.py --model gpt --case math_short --runs 3
 ```
 
 Output is written to `simulation/output/`.
