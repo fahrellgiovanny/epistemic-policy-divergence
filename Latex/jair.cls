@@ -24,8 +24,8 @@
 
 \def\@journalName{Journal of Artificial Intelligence Research}%
 \def\@journalNameShort{JAIR}%
-\def\@permissionCodeOne{XXXX}%
-\def\@permissionCodeTwo{XXXX}%
+\def\@permissionCodeOne{xxx}%
+\def\@permissionCodeTwo{xxx}%
 
 %% Rights management information.  This information is sent to you
 %% when you complete the rights form.  These commands have SAMPLE
@@ -64,9 +64,9 @@
 
 %% Jair AE and Track
 \def\JAIRAE#1{\def\@JAIRAE{#1}}
-\JAIRAE{Insert JAIR AE Name}
+\JAIRAE{xxx}
 \def\JAIRTrack#1{\def\@JAIRTrack{#1}}
-\JAIRTrack{Insert JAIR Track Name Here}
+\JAIRTrack{xxx}
 
 \def\@secfont{\sffamily\bfseries\large\section@raggedright}
 \def\@subsecfont{\sffamily\bfseries\large\section@raggedright}
