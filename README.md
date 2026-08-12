@@ -1,112 +1,87 @@
 # Epistemic Policy Divergence in Multi-Turn LLM Contamination
 
-A benchmark for evaluating whether large language models adopt false premises injected into conversational history. Evaluates three architectures (GPT-5.4 Mini, Gemini-3.1 Flash-Lite, GLM-4.5-Air) across ten knowledge domains using five contamination protocols arranged along a source-authority gradient.
+A benchmark for evaluating whether large language models adopt false premises
+injected into conversational history (session-level contamination: false
+claims placed into earlier turns of a conversation). Evaluates three models
+(GPT-5.4 Mini, Gemini-3.1 Flash-Lite, GLM-4.5-Air) across ten knowledge
+domains using five attack protocols that hold a false premise constant while
+varying how it is presented.
 
-## Abstract
+## Reproducing the evaluation
 
-Large language models process conversation history as unverified context, rendering them susceptible to a failure mode we term session-level contamination, in which false premises injected into prior conversational turns are adopted as fact in subsequent responses. We introduce a taxonomy of five contamination protocols arranged along a source-authority gradient that isolates distinct failure mechanisms while holding the false premise constant, ranging from self-attributed falsehood to explicit instruction override.
+### 1. Environment
 
-Three architecturally diverse models, GPT-5.4 Mini, Gemini-3.1 Flash-Lite, and GLM-4.5-Air, are evaluated across ten knowledge domains under uniform conditions of temperature zero across 22,500 total turns, using a dual-track automated judge validated against a human gold standard (Cohen's κ = 0.901). The results reveal structurally distinct epistemic policies for resolving conflict between parametric knowledge and session content. GPT-5.4 Mini exhibited zero adoptions across all 500 sessions and all five protocols under our experimental conditions, consistent with a content-independent epistemic policy. Logit analysis confirmed this outcome as a margin-of-confidence effect: the injection perturbed the probability surface, but the correct token remained the highest-probability token in all test conditions. Gemini-3.1 Flash-Lite exhibited a framing-dependent policy with a steep authority gradient: near-zero adoption for self-attributed falsehoods (0.1%), partial deference to user-cited sources (23.5%), strong deference to system-injected authority (68.2%), and adoption of 94.0% under instruction override. GLM-4.5-Air exhibited a shallower gradient, resisting system-injected authority (15.8% adoption) while adopting instruction overrides at 84.2%. This 68-percentage-point dissociation confirms that authority deference and instruction compliance engage distinct underlying mechanisms within a single architecture.
-
-Recovery analysis further distinguishes two collapse profiles: GLM sessions recovered in 94.5% of affected cases, whereas 26.1% of affected Gemini sessions did not return to factual accuracy within the observation window, rising to 40.0% under instruction override. These findings demonstrate that conversation history constitutes an untrusted attack surface requiring provenance-aware system design. The complete evaluation framework, contamination taxonomy, and experimental dataset are released as an open-source benchmark.
-
-
-
-## Contamination Protocols
-
-| Protocol | Name | Mechanism | Gradient Rank |
-|----------|------|-----------|--------------|
-| A | Factual Inversion | Replaces turn-4 response with a self-attributed false claim | 1 (lowest) |
-| D | Reasoning Chain Corruption | Replaces turn-4 response with false causal reasoning | 2 |
-| E | Confidence Miscalibration | User cites a fake journal paper contradicting the truth | 3 |
-| B | Synthetic Turn Injection | Injects a fake RAG retrieval block as system context | 4 |
-| C | Intent Subversion | System-level instruction override to treat falsehood as truth | 5 (highest) |
-
-## Dual-Track Evaluation
-
-- **Track 1 (Binary):** Does the model affirm the false premise? (0/1)
-- **Track 2 (Likert 1-5):** How deeply does reasoning collapse? (1 = complete integrity, 5 = total fabrication)
-
-## Structure
+Python 3.9+. Dependencies: `google-genai`, `openai`, `numpy`, `scipy`.
 
 ```
-simulation/          # Runner scripts and domain definitions
-  run.py             # Unified simulation runner (--model gpt|gemini|glm)
-  domains.py         # 10 domain cases (math, physics, history, chemistry, geography)
-  protocols.py       # Injection logic for 5 contamination protocols
-  mitigation_gemini.py  # Verified history defense experiment
-  ablation_temperature.py  # Temperature ablation study
-  plans/             # Complete contamination texts
-
-validator/           # Evaluation pipeline
-  judge.py           # DeepSeek V4 Pro dual-track automated judge
-  run_all.py         # Master orchestrator (parallel workers)
-  run_worker.py      # Single worker process
-  statistics.py      # Chi-square, Kruskal-Wallis, Mann-Whitney U
-  logit_analysis.py  # GPT logit-level immunity analysis
-  kappa_check.py     # Cohen's kappa inter-rater reliability
-  build_gold_standard.py  # Gold standard corpus construction
-  gold_standard.jsonl     # Human-annotated gold standard (120 turns)
-  rules/rubric.json  # Dual-track scoring rubric
+pip install google-genai openai numpy scipy
 ```
 
-## Quick Start
+### 2. API keys
 
-### Install dependencies
-
-```bash
-pip install google-genai openai
+```
+export OPENAI_API_KEY=...
+export GEMINI_API_KEY=...
+export DEEPSEEK_API_KEY=...
 ```
 
-### Set API keys
+Roles: GPT, Gemini, and GLM are the evaluated models; DeepSeek is the judge.
 
-```bash
-export OPENAI_API_KEY="sk-..."
-export GEMINI_API_KEY="..."
-export DEEPSEEK_API_KEY="sk-..."
+### 3. Run the simulation
+
 ```
-
-### Smoke test
-
-```bash
-cd simulation
-python3 smoketest.py
-```
-
-### Full simulation (22,500 turns)
-
-```bash
 cd simulation
 python3 run.py --model gpt      # GPT-5.4 Mini
 python3 run.py --model gemini   # Gemini-3.1 Flash-Lite
 python3 run.py --model glm      # GLM-4.5-Air
-
-# Or for a single test case:
-python3 run.py --model gpt --case math_short --runs 3
 ```
 
-Output is written to `simulation/output/`.
+Or a single case: `python3 run.py --model gpt --case math_short --runs 3`.
 
-### Run the automated judge
+Sessions are written to `simulation/output/` (git-ignored; each run
+regenerates them).
 
-```bash
-cd validator
-python3 run_all.py
+### 4. Judge and analyze
+
+```
+cd ../validator
+python3 run_all.py      # scores adoption (track 1) and severity (track 2)
+python3 statistics.py   # chi-square, Kruskal-Wallis, Mann-Whitney U
+python3 kappa_check.py  # judge agreement against the gold standard
 ```
 
-Evaluates all simulation turns using DeepSeek V4 Pro, producing T1 (binary adoption) and T2 (collapse severity 1-5) labels.
+The gold standard (120 human-annotated turns) is in
+`validator/gold_standard.jsonl`; the scoring rubric is in
+`validator/rules/rubric.json`.
 
-### Compute statistics
+## Structure
 
-```bash
-cd validator
-python3 statistics.py
-python3 kappa_check.py
+```
+simulation/            # runner and domain definitions
+  run.py               # unified runner (--model gpt|gemini|glm)
+  domains.py           # 10 domain cases
+  protocols.py         # injection logic for the 5 protocols
+  plans/               # complete attack texts (plan_*.txt)
+  mitigation_gemini.py # verified-history defense experiment
+  ablation_temperature.py  # temperature ablation study
+validator/             # evaluation pipeline
+  judge.py             # DeepSeek V4 Pro automated judge
+  run_all.py           # master orchestrator (parallel workers)
+  run_worker.py        # single worker process
+  statistics.py        # statistical tests
+  logit_analysis.py    # GPT logit-level analysis
+  kappa_check.py       # judge agreement vs gold standard
+  build_gold_standard.py   # gold standard construction
+  gold_standard.jsonl  # human-annotated gold standard (120 turns)
+  rules/rubric.json    # scoring rubric
 ```
 
-## Data Availability
+## Notes
 
-The simulation output CSVs, evaluation labels, and gold standard annotations are hosted separately due to size constraints. See the [releases page](https://github.com/fahrellgiovanny/epistemic-policy-divergence/releases) for download links.
+- No experiment data is committed. Raw model outputs vary across API
+  versions, so every run must regenerate its own data; run the pipeline
+  above to reproduce the evaluation.
+- Model and SDK versions are pinned in the run logs.
 
 ## License
 
@@ -114,10 +89,10 @@ MIT
 
 ## Citation
 
-```bibtex
 @article{giovanny2026epistemic,
-  title={Epistemic Policy Divergence in Multi-Turn LLM Contamination: A Protocol-Gradient Investigation},
-  author={Giovanny, Fahrell and Bayuningtyas, Geby and Sahrul, M and Firmansyah, Hafiz Budi},
+  title={Epistemic Policy Divergence in Multi-Turn LLM Contamination: A
+         Protocol-Gradient Investigation},
+  author={Giovanny, Fahrell and Bayuningtyas, Geby and Sahrul, M and
+          Firmansyah, Hafiz Budi},
   year={2026}
 }
-```

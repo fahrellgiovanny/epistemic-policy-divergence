@@ -1,7 +1,6 @@
 """Test logit analysis — verify true vs false token probability after injection.
 
 Tests: math_short protocol A (GPT), chemistry_short protocol A (Gemini)
-Cost: ~$0.02
 """
 
 import csv, os, sys
