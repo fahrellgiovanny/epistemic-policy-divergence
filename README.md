@@ -20,6 +20,17 @@ a single architecture.
 - The automated judge is validated against a 120-turn human gold standard
   (Cohen's κ = 0.901).
 
+## For practitioners
+
+- Models are not interchangeable: under identical conditions, adoption of the
+  same injected false premise ranged from 0 percent (GPT-5.4 Mini) to 94
+  percent (Gemini-3.1 Flash-Lite under instruction override).
+- Evaluate a model's vulnerability profile before deploying it where
+  conversation history is trusted input; it is a deployment property, not a
+  footnote.
+- Conversation history is an untrusted attack surface: pair model choice
+  with history-integrity and provenance checks (see companion repository).
+
 Paper: Epistemic Policy Divergence in Multi-Turn LLM Contamination: A
 Protocol-Gradient Investigation (arXiv ID upon posting).
 
