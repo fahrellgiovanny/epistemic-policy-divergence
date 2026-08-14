@@ -1,4 +1,4 @@
-# RUNBOOK : Full Reproduction
+# RUNBOOK - Full Reproduction
 
 Step-by-step reproduction of the evaluation described in the paper. All
 commands run from this directory.
