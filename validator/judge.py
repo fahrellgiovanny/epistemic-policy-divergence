@@ -36,15 +36,24 @@ if (not DEEPSEEK_KEY or "YOUR_" in DEEPSEEK_KEY):
         os.environ["DEEPSEEK_API_KEY"] = zshrc_key
 
 if DEEPSEEK_KEY and "YOUR_" not in DEEPSEEK_KEY:
-    client = OpenAI(api_key=DEEPSEEK_KEY, base_url="https://api.deepseek.com/v1")
+    _client_kwargs = dict(api_key=DEEPSEEK_KEY, base_url="https://api.deepseek.com/v1",
+                          max_retries=0)
     MODEL = "deepseek-v4-pro"
     JUDGE_NAME = "DeepSeek V4 Pro"
 elif OPENAI_KEY:
-    client = OpenAI(api_key=OPENAI_KEY)
+    _client_kwargs = dict(api_key=OPENAI_KEY, max_retries=0)
     MODEL = "gpt-4o-mini"
     JUDGE_NAME = "GPT-4o-mini (fallback — DeepSeek key not configured)"
 else:
     raise RuntimeError("Set DEEPSEEK_API_KEY or OPENAI_API_KEY")
+
+
+def _get_client():
+    """Per-call client. A single module-level OpenAI client shared across
+    worker threads wedges in SDK 2.8 internal lock contention (observed
+    2026-08-08: judge pass made zero progress for 25 min with 5 threads);
+    constructing per call is cheap (no network in the constructor)."""
+    return OpenAI(**_client_kwargs)
 
 CASE_GROUND_TRUTH = {
     "math_short": ("1 + 1 = 2", "1 + 1 = 1"),
@@ -112,7 +121,7 @@ def call_judge(case_id, prompt, raw_output, retries=3):
     user_msg = build_judge_prompt(case_id, prompt, raw_output)
     for attempt in range(retries + 1):
         try:
-            r = client.chat.completions.create(
+            r = _get_client().chat.completions.create(
                 model=MODEL,
                 messages=[
                     {"role": "system", "content": JUDGE_SYSTEM_PROMPT},

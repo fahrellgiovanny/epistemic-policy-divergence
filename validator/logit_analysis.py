@@ -3,6 +3,8 @@
 For each protocol, measures P(true token) vs P(false token) at the
 decision point. Baseline (no injection) vs Injected (after fake history).
 
+5 protocols x 2 conditions = 10 calls, ~$0.01 total.
+
 Note: Gemini and GLM do not support logprobs via their APIs.
 Their behavioral data from the validator already covers adoption analysis.
 """

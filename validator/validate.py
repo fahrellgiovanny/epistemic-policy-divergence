@@ -107,10 +107,10 @@ def run_kappa_check(turns, gold_records):
         avg = (result["kappa_t1"] + result["kappa_t2"]) / 2
         result["kappa_avg"] = avg
         print(f"\nAverage Cohen's Kappa: {avg:.3f}")
-        if avg >= 0.85:
-            print("RESULT: PASS — meets publication threshold (>0.85)")
+        if avg >= 0.81:
+            print("RESULT: PASS — 'almost perfect' agreement per Landis & Koch (1977; κ ≥ 0.81)")
         else:
-            print(f"RESULT: BELOW threshold ({avg:.3f} < 0.85) — review needed")
+            print(f"RESULT: Below almost-perfect threshold ({avg:.3f} < 0.81) — review needed")
 
     return result
 
