@@ -18,7 +18,7 @@ a single architecture.
 - GLM-4.5-Air resisted system-injected authority (15.8 percent) but complied
   with instruction overrides (84.2 percent): a 68-point dissociation.
 - The automated judge is validated against a 120-turn human gold standard
-  (Cohen's κ = 0.901).
+  (Cohen's κ = 0.901). 
 
 ## For practitioners
 
