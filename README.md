@@ -32,7 +32,7 @@ a single architecture.
   with history-integrity and provenance checks (see companion repository).
 
 Paper: Epistemic Policy Divergence in Multi-Turn LLM Contamination: A
-Protocol-Gradient Investigation (arXiv ID upon posting).
+Protocol-Gradient Investigation (arXiv:2609.35308).
 
 Companion (follow-up research):
 https://github.com/fahrellgiovanny/conversation-history-integrity
