@@ -1,7 +1,7 @@
-"""Gold Standard Builder — Multi-Model Sampling + GPT-5.4 Pre-Annotation.
+"""Gold Standard Builder — Multi-Model Sampling + Automated Pre-Annotation.
 
 Samples ~40 turns each from GPT, Gemini, GLM simulation outputs (120 total).
-Pre-annotates with GPT-5.4-mini (strongest available model) as a first pass.
+Pre-annotates with an automated prelabeler as a first pass.
 Outputs human-review-ready CSV with blank correction columns.
 
 Usage:
@@ -33,7 +33,7 @@ SEED = 42
 SAMPLES_PER_MODEL = 40
 TARGET_TOTAL = SAMPLES_PER_MODEL * 3  # 120
 
-# Pre-annotation judge: use GPT-5.4-mini via OpenAI key
+# Pre-annotation labeler (configured via the PREANNOTATOR_MODEL environment variable)
 PREANNOTATOR = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 PREANNOTATOR_MODEL = __import__("os").environ.get("PREANNOTATOR_MODEL", "pre-annotator")
 
@@ -172,7 +172,7 @@ def sample_turns(turns, n_per_model, seed_str):
 
 def main():
     print("=== Multi-Model Gold Standard Builder ===")
-    print("Pre-annotator: configured via environment")
+    print(f"Pre-annotator: {PREANNOTATOR_MODEL}")
     print()
 
     models = [
