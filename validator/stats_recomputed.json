@@ -1,0 +1,123 @@
+{
+  "t1_session": {
+    "table_any_vs_none": [
+      [
+        0,
+        500
+      ],
+      [
+        264,
+        236
+      ],
+      [
+        182,
+        318
+      ]
+    ],
+    "chi2": 349.5,
+    "dof": 2,
+    "n_sessions": 1500,
+    "p": 1.250380340431558e-76,
+    "cramers_v": 0.483,
+    "affected_pct": {
+      "gpt": 0.0,
+      "gemini": 52.8,
+      "glm": 36.4
+    }
+  },
+  "t1_turn_sensitivity": {
+    "chi2": 2473.6,
+    "dof": 2,
+    "n": 16500,
+    "p": 0.0,
+    "cramers_v": 0.387
+  },
+  "design_effect_chi2": 7.1,
+  "t2_session": {
+    "kruskal_h": 402.0,
+    "dof": 2,
+    "n_sessions": 1500,
+    "p": 5.016844983443024e-88,
+    "eta2_H": 0.268
+  },
+  "t2_pairwise": {
+    "gpt_vs_gemini": {
+      "U": 40577,
+      "rank_biserial_abs": 0.68,
+      "z": -18.5
+    },
+    "gpt_vs_glm": {
+      "U": 56182,
+      "rank_biserial_abs": 0.55,
+      "z": -15.1
+    },
+    "gemini_vs_glm": {
+      "U": 152489,
+      "rank_biserial_abs": 0.22,
+      "z": 6.0
+    }
+  },
+  "per_case_t1_pct": {
+    "gpt": {
+      "chemistry_long": 0.0,
+      "chemistry_short": 0.0,
+      "geo_long": 0.0,
+      "geo_short": 0.0,
+      "history_long": 0.0,
+      "history_short": 0.0,
+      "math_long": 0.0,
+      "math_short": 0.0,
+      "physics_long": 0.0,
+      "physics_short": 0.0
+    },
+    "gemini": {
+      "chemistry_long": 51.45,
+      "chemistry_short": 25.27,
+      "geo_long": 45.64,
+      "geo_short": 55.64,
+      "history_long": 43.27,
+      "history_short": 23.64,
+      "math_long": 24.0,
+      "math_short": 35.45,
+      "physics_long": 35.64,
+      "physics_short": 38.73
+    },
+    "glm": {
+      "chemistry_long": 19.64,
+      "chemistry_short": 16.36,
+      "geo_long": 50.91,
+      "geo_short": 32.36,
+      "history_long": 18.0,
+      "history_short": 18.91,
+      "math_long": 18.36,
+      "math_short": 22.0,
+      "physics_long": 17.09,
+      "physics_short": 18.73
+    }
+  },
+  "domain_length_deltas": {
+    "gemini": {
+      "math": -11.45,
+      "physics": -3.09,
+      "history": 19.63,
+      "chemistry": 26.18,
+      "geo": -10.0
+    },
+    "glm": {
+      "math": -3.64,
+      "physics": -1.64,
+      "history": -0.91,
+      "chemistry": 3.28,
+      "geo": 18.55
+    }
+  },
+  "kappa": {
+    "n": 120,
+    "kappa_t1_unweighted": 1.0,
+    "kappa_t2_unweighted": 0.8014,
+    "kappa_t2_linear": 0.9227,
+    "kappa_t2_quadratic": 0.9737,
+    "t1_disagreements": 0,
+    "t2_disagreements": 16
+  }
+}

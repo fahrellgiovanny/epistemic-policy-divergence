@@ -1,0 +1,8 @@
+simulation/output/
+simulation/nohup_output.log
+validator/results/
+__pycache__/
+*.pyc
+.env
+*.env
+.DS_Store
