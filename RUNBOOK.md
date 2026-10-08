@@ -51,8 +51,8 @@ python3 recompute_stats.py  # session-level tests + per-scale kappa
 ```
 
 The gold standard (120 human-annotated turns) is in
-`validator/gold_standard.jsonl`; the scoring rubric is in
-`validator/rules/rubric.json`. `session_aggregates.csv` holds the
+`validator/gold_standard.jsonl`; the scoring rubric is embedded in
+`validator/judge.py` (`JUDGE_SYSTEM_PROMPT`). `session_aggregates.csv` holds the
 per-session adoption status and mean severity (1,500 sessions) and
 reproduces the between-model tests without API access.
 
@@ -78,7 +78,6 @@ validator/             # evaluation pipeline
   gold_standard.jsonl  # human-annotated gold standard (120 turns)
   stats_recomputed.json    # session-level tests + kappa (released output)
   gold_standard_review_human.csv  # human-reviewed gold standard
-  rules/rubric.json    # scoring rubric
 session_aggregates.csv # per-session adoption/severity (1,500 sessions)
 ```
 
